@@ -1,58 +1,71 @@
-// import your packages here
-import { fetchData, postData  } from "./modules/TheDataMiner.js";
+import { fetchData } from "./components/TheDataMiner.js";
+import MiniCars from "./components/theMiniCars.js";
 
 (() => {
-  let lightBox = document.querySelector(".info"),
-    title = document.querySelector(".info h3"),
-    UserDescription = document.querySelector(".info p"),
-    closeButton = document.querySelector(".closeButton");
-  // stub * just a place for non-component-specific stuff
-  console.log('loaded');
 
-  function popErrorBox(message) {
-    alert("Something has gone horribly, horribly wrong");
-  }
+  Vue.component("car-card",
+    {
+      props: ["mini"],
+      template: `<img @click="miniInfo" :src="'images/' + mini.image">`,
 
-  function handleDataSet(data) {
-    let Name = data[0].name,
-      des = data[0].description;
+      mounted: function () {
+        console.log(`loaded ${this.mini.name}'s image`);
+      },
 
-    title.textContent = Name;
-    UserDescription.textContent = des;
+      methods: {
+        miniInfo() {
+          console.log("mini Info ", this.mini.name);
+          this.$emit("showmydata", this.mini);
+        }
+      }
+    });
 
-    lightBox.classList.add("open");
-    document.body.classList.add("open");
-  }
+  let vue_em = new Vue({
 
-  function close() {
-    lightBox.classList.remove("open");
-    document.body.classList.remove("open");
-  }
-  closeButton.addEventListener("click", close);
+    data: {
+      message: "Hello from Vue!",
+      anotherMessage: "more text, so simple! much winning",
+      removeAFormat: true,
+      showBioData: false,
+      variants: [],
+      currentProfData: {}
+    },
+    // this is the "mounted" lifecycle hook. Vue is done creating itself, and has attached itself to the "main" div on the page
+    mounted: function () {
+      console.log("Vue is mounted, trying fetch for initial data");
 
-  function retrieveProjectInfo(event) {
-    // test for an ID
+      fetchData("./includes/index.php")
+        .then(data => {
+          data.forEach(prof => this.variants.push(prof));
+        })
+        .catch(err => console.error(err));
 
-    if (!event.target.id) { return }
+    },
+    // run a method when we change our view (update the DOM with Vue)
+    updated: function () {
+      console.log('Vue just updated the Car');
+    },
+    methods:
+    {
+      MiniSelected(mini) {
+        console.log("Mini Selected: ", mini.name);
+        this.showBioData = true;
+        this.currentProfData = mini;
+      }
+      // removeProf(mini) {
+      // remove this prof from the professors array
+      // console.log('clicked to remove prof', mini, mini.name);
+      // the "this" keyword inside a vue instance REFERS to the Vue instance itself by default
 
-    fetchData(`./includes/index.php?id=${event.target.id}`).then(data => handleDataSet(data)).catch(err => console.log(err));
-  }
-
-  function renderPortfolioThumbnails(thumbs) {
-    let mainSectiona = document.querySelector('#mainSection'),
-      mainTemplate = document.querySelector('#infoTemp').content;
-
-    for (let user in thumbs) {
-      let currentSec = mainTemplate.cloneNode(true),
-        currentUserText = currentSec.querySelector('.user').children;
-
-      currentUserText[0].src = `images/${thumbs[user].image}`;
-      currentUserText[0].id = thumbs[user].id;
-
-      mainSectiona.appendChild(currentSec);
+      // make the selected prof's data visible
+      // this.professors.splice(this.professors.indexOf(mini), 1);
+      //this.$delete(this.professors, mini);
+      // }
+    },
+    components: {
+      "prof-card": MiniCars
     }
-    mainSectiona.addEventListener("click", retrieveProjectInfo);
-  }
 
-  fetchData("./includes/index.php").then(data => renderPortfolioThumbnails(data)).catch(err => { console.log(err); popErrorBox(err); });
+  }).$mount("#main");
+
 })();
