@@ -9,17 +9,39 @@
 </head>
 
 <body>
+    <section id="header">
+        <div class="header container">
+            <div class="nav-bar">
+                <div class="brand">
+                    <a href="#hero">
+                        <h1>Mini</h1>
+                    </a>
+                </div>
+                <div class="nav-list">
+                    <div class="hamburger">
+                        <div class="bar"></div>
+                    </div>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="About.html">About</a></li>
+                        <li><a href="Contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
     <main id="main">
-        <section>
+        <section class="Car_Panel">
+            <div class="carshowcase">
             <car-card @showmydata="MiniSelected" v-for="mini in variants"
              :mini="mini" :key="mini.id">
             </car-card>
-    
-            <section :class="{'show-data' : showBioData}">
+            </div>
+            <div class="info" :class="{'show-data' : showBioData}">
                 <h1>{{ currentProfData.name }}</h1>
                 <p>{{ currentProfData.description }}</p>
                 <img :src="'images/' + currentProfData.image" alt="">
-            </section>
+            </div>
         </section>
     </main>
     <script type="module" src="js/main.js"></script>
