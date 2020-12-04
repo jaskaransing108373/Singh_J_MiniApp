@@ -1,7 +1,7 @@
 # Singh_J_MiniApp
 This project includes the Top 3 models of Mini Cooper. This is assignment is basically fetching all the details from the database and loading them. And using Vue
 
-[My Favourite Things Roadmap](https://docs.google.com/document/d/1XGXUgzyZemKIpeqh57Ds3qBTKXPMrXmtUwATLkAeJTg/edit?usp=sharing)
+[MINI App Roadmap](https://docs.google.com/document/d/1XGXUgzyZemKIpeqh57Ds3qBTKXPMrXmtUwATLkAeJTg/edit?usp=sharing)
 ## Getting started
 These instructions will let you know how to open this interesting page of my favourite things. See Deployment for notes on how to deploy the project on your Mac/Pc.
 ## To view, follow the steps below:-
